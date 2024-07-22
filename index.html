@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    #todo-list { list-style-type: none; padding: 0; }
+    .todo-item { display: flex; justify-content: space-between; }
+    .completed { text-decoration: line-through; }
+  </style>
+</head>
+<body>
+  <h1>To-Do List</h1>
+  <input type="text" id="new-todo" placeholder="Enter a new to-do">
+  <button onclick="addTodo()">Add</button>
+  <ul id="todo-list"></ul>
+
+  <script>
+    function addTodo() {
+      const todoText = document.getElementById('new-todo').value;
+      if (todoText === '') return;
+
+      const todoList = document.getElementById('todo-list');
+      const listItem = document.createElement('li');
+      listItem.className = 'todo-item';
+      listItem.innerHTML = `
+        <span>${todoText}</span>
+        <button onclick="completeTodo(this)">Complete</button>
+        <button onclick="removeTodo(this)">Remove</button>
+      `;
+
+      todoList.appendChild(listItem);
+      document.getElementById('new-todo').value = '';
+    }
+
+    function completeTodo(button) {
+      const listItem = button.parentElement;
+      listItem.querySelector('span').classList.toggle('completed');
+    }
+
+    function removeTodo(button) {
+      const listItem = button.parentElement;
+      listItem.remove();
+    }
+  </script>
+</body>
+</html>
