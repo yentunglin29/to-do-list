@@ -33,6 +33,10 @@
 
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script>
+
+    // load to-do list
+    document.addEventListener('DOMContentLoaded', loadTodos);
+    
     function addTodo() {
       const todoText = document.getElementById('new-todo').value;
       if (todoText === '') return;
@@ -54,18 +58,55 @@
 
       todoList.appendChild(listItem);
       document.getElementById('new-todo').value = '';
+      saveTodos();
     }
 
     function completeTodo(button) {
       const listItem = button.parentElement.parentElement;
       listItem.querySelector('span').classList.toggle('line-through');
+      saveTodos();
     }
 
     function removeTodo(button) {
       const listItem = button.parentElement.parentElement;
       listItem.remove();
+      saveTodos();
     }
 
+    function saveTodos() {
+      const todoList = document.getElementById('todo-list');
+      const todos = [];
+      todoList.querySelectorAll('li').forEach(item => {
+        const todoText = item.querySelector('span').textContent;
+        const completed = item.querySelector('span').classList.contains('line-through');
+        todos.push({ text: todoText, completed: completed });
+      });
+      localStorage.setItem('todos', JSON.stringify(todos));
+    }
+
+    function loadTodos() {
+      const savedTodos = localStorage.getItem('todos');
+      if (savedTodos) {
+        const todos = JSON.parse(savedTodos);
+        const todoList = document.getElementById('todo-list');
+        todos.forEach(todo => {
+          const listItem = document.createElement('li');
+          listItem.className = 'todo-item flex justify-between items-center p-2 mb-2 border rounded bg-white shadow';
+          listItem.innerHTML = `
+            <span class="flex-grow ${todo.completed ? 'line-through' : ''}">${todo.text}</span>
+            <div>
+              <button onclick="completeTodo(this)" class="mr-2 bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded">
+                <i class="fas fa-check"></i>
+              </button>
+              <button onclick="removeTodo(this)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          `;
+          todoList.appendChild(listItem);
+        });
+      }
+    }    
     // 初始化 Flatpickr 日曆
     flatpickr("#calendar", {
       inline: true,
