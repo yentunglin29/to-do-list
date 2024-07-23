@@ -6,11 +6,22 @@
   <title>To-Do List</title>
   <link href="dist/styles.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <style>
+    .flatpickr-calendar {
+      transform: scale(0.5);
+      transform-origin: top;
+    }
+    .todo-input-group {
+      margin-top: -130px;
+    }
+  </style>
 </head>
 <body class="bg-gray-100 font-sans leading-normal tracking-normal">
   <div class="container mx-auto p-4">
-    <h1 class="text-2xl font-bold text-center text-gray-800 mb-4">To-Do List</h1>
-    <div class="flex justify-center mb-4">
+    <h1 class="text-2xl font-bold text-center text-gray-800 mb-2">To-Do List</h1>
+    <div id="calendar" class="mb-4"></div>
+    <div class="flex justify-center mb-4 todo-input-group">
       <input type="text" id="new-todo" placeholder="Enter a new to-do" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
       <button onclick="addTodo()" class="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
         <i class="fas fa-plus"></i> Add
@@ -20,6 +31,7 @@
     </ul>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script>
     function addTodo() {
       const todoText = document.getElementById('new-todo').value;
@@ -53,6 +65,13 @@
       const listItem = button.parentElement.parentElement;
       listItem.remove();
     }
+
+    // 初始化 Flatpickr 日曆
+    flatpickr("#calendar", {
+      inline: true,
+      dateFormat: "Y-m-d",
+      defaultDate: "today"
+    });
   </script>
 </body>
 </html>
